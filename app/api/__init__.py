@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
-# from .endpoints.todo import router as todo_router
+from .endpoints.product import router as product_router
 
 
 router = APIRouter(prefix="/api")
 
-# router.include_router(todo_router)
+router.include_router(product_router)
