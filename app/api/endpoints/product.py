@@ -17,10 +17,12 @@ async def create_product(
     data: ProductCreate,
     db: AsyncSession = Depends(get_db_session),
 ):
+    if data.price < 0:
+        raise HTTPException(status_code=400, detail="Price must be non-negative")
     db_product = DBProduct(title=data.title, price=data.price, count=data.count)
     db.add(db_product)
     await db.commit()
-    return db_product
+    return {"message": "Product created successfully", "product": db_product}
 
 
 @router.get("/{product_id}")
