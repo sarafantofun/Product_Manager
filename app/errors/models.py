@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 
 
-class ErrorResponse(BaseModel):
+class ErrorResponseModel(BaseModel):
     status_code: int
-    detail: str
+    message: str
+    error_code: str | None = None
