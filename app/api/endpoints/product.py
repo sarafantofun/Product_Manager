@@ -12,7 +12,7 @@ from app.errors.exceptions import ProductNotFoundException
 router = APIRouter(prefix="/product", tags=["Product"])
 
 
-@router.post("", status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED)
 async def create_product(
     data: ProductCreate,
     db: AsyncSession = Depends(get_db_session),
