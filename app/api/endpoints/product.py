@@ -25,7 +25,7 @@ async def create_product(
     return {"message": "Product created successfully", "product": db_product}
 
 
-@router.get("/{product_id}")
+@router.get("/{product_id}/")
 async def get_product(product_id: int, db: AsyncSession = Depends(get_db_session)):
     result = await db.execute(select(DBProduct).filter(DBProduct.id == product_id))
     product_obj = result.scalars().first()
@@ -34,7 +34,7 @@ async def get_product(product_id: int, db: AsyncSession = Depends(get_db_session
     return product_obj
 
 
-@router.put("/{product_id}")
+@router.put("/{product_id}/")
 async def update_product(
     product_id: int,
     data: ProductCreate,
@@ -51,7 +51,7 @@ async def update_product(
     return product_obj_update
 
 
-@router.delete("/{product_id}")
+@router.delete("/{product_id}/")
 async def del_product(
     product_id: int,
     db: AsyncSession = Depends(get_db_session),
