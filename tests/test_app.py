@@ -160,3 +160,16 @@ async def test_update_product_success(async_test_session, async_client):
         "count": 10,
         "description": "The best bread in the city"
     }
+
+
+@pytest.mark.asyncio
+async def test_delete_product_success(async_test_session, async_client):
+    """Successful delete"""
+    response = await async_client.post(
+        "/api/product/",
+        json={"title": "Bread", "price": 135.18, "count": 3, "description": ""},
+    )
+    new_product_id = response.json()["product"]["id"]
+    response = await async_client.delete(f"/api/product/{new_product_id}/")
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["message"] == "Product successfully deleted"
