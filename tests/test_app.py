@@ -68,7 +68,7 @@ async def test_create_product_success(async_test_session, async_client):
             "title": "Bread",
             "price": 135.18,
             "count": 3,
-            'description': ''
+            "description": ""
         }
     }
 
@@ -121,7 +121,7 @@ async def test_get_product_by_id(async_test_session, async_client):
         "title": "Bread",
         "price": 135.18,
         "count": 3,
-        'description': ''
+        "description": ""
     }
 
 
@@ -134,3 +134,29 @@ async def test_get_product_not_found(async_test_session, async_client):
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json()["message"] == "Product not found"
 
+
+@pytest.mark.asyncio
+async def test_update_product_success(async_test_session, async_client):
+    """Successful PUT request"""
+    response = await async_client.post(
+        "/api/product/",
+        json={"title": "Bread", "price": 135.18, "count": 3, "description": ""},
+    )
+    new_product_id = response.json()["product"]["id"]
+    response = await async_client.put(
+        f"/api/product/{new_product_id}/",
+        json={
+            "title": "Tasty bread",
+            "price": 150.00,
+            "count": 10,
+            "description": "The best bread in the city"
+        },
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json() == {
+        "id": new_product_id,
+        "title": "Tasty bread",
+        "price": 150.00,
+        "count": 10,
+        "description": "The best bread in the city"
+    }

@@ -47,6 +47,8 @@ async def update_product(
     product_obj_update.title = data.title
     product_obj_update.price = data.price
     product_obj_update.count = data.count
+    if data.description is not None:
+        product_obj_update.description = data.description
     await db.commit()
     return product_obj_update
 
