@@ -8,6 +8,8 @@ from sqlalchemy import NullPool
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
 from app.api.db.models import Base
+from app.api.endpoints.auth import verify_password
+from app.api.endpoints.users import get_password_hash
 from main import app
 from tests.test_db_settings import TEST_DATABASE_URL
 
@@ -173,3 +175,17 @@ async def test_delete_product_success(async_test_session, async_client):
     response = await async_client.delete(f"/api/product/{new_product_id}/")
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["message"] == "Product successfully deleted"
+
+
+@pytest.mark.asyncio
+async def test_create_user_success(async_test_session, async_client):
+    """Successful POST request"""
+    response = await async_client.post(
+        "/api/users/create_user",
+        json={"username": "Test555", "password": "111", "role": "admin"},
+    )
+    new_user_password = "111"
+    hashed_password = get_password_hash(new_user_password)
+    assert response.json()["username"] == "Test555"
+    assert response.json()["role"] == "admin"
+    assert verify_password(new_user_password, hashed_password) is True
